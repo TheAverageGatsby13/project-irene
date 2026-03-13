@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: irene-postgres
+    environment:
+      POSTGRES_DB: irene
+      POSTGRES_USER: irene
+      POSTGRES_PASSWORD: irene
+    ports:
+      - "5432:5432"
+    volumes:
+      - irene_pg_data:/var/lib/postgresql/data
+
+volumes:
+  irene_pg_data:

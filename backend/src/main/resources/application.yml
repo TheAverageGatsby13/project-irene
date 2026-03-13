@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: project-irene
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:replace-this-with-very-long-secret-key-min-32-bytes}
+    expiration-minutes: 240
+  ai:
+    mode: ${AI_MODE:oci}
+    chat-endpoint: ${OCI_CHAT_ENDPOINT:https://example.com/chat/completions}
+    embedding-endpoint: ${OCI_EMBEDDING_ENDPOINT:https://example.com/embeddings}
+    api-key: ${OCI_GENAI_API_KEY:sk-MxnYk506AbZIfIKzZNvZFU3xOsehwig8LQLLiY68hARgtjPT}
+    secondary-api-key: ${OCI_GENAI_API_KEY_2:sk-t1IX13zYUyHuc9OqjYt8tL5VBYDJmrb12RSbt2UfnezH28A4}
+    chat-model: ${OCI_CHAT_MODEL:cohere.command-r-plus}
+    embedding-model: ${OCI_EMBEDDING_MODEL:cohere.embed-english-v3.0}
+    gemini-api-key: ${GEMINI_API_KEY:AIzaSyCXtMLBKBdHK6kDBqxavDvKDJ14dyuET70}
+    gemini-model: ${GEMINI_MODEL:gemini-1.5-flash}
+    gemini-embedding-model: ${GEMINI_EMBEDDING_MODEL:text-embedding-004}
+    gemini-base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta}
+    timeout-seconds: 20
+    max-retries: 3
+  seed-data: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
