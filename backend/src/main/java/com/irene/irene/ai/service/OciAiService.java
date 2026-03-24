@@ -281,7 +281,52 @@ public class OciAiService implements AiService {
         return trimmed;
     }
 
+    private static final List<String> HIGH_RISK_TERMS = List.of(
+            "suicide",
+            "kill myself",
+            "end my life",
+            "want to die",
+            "hurt myself",
+            "self harm",
+            "cut myself",
+            "no reason to live",
+            "ending it all",
+            "can't go on",
+            "overdose"
+    );
+
+    private static final List<String> MEDIUM_RISK_TERMS = List.of(
+            "panic",
+            "panic attack",
+            "severe anxiety",
+            "depress",
+            "hopeless",
+            "trauma",
+            "overwhelmed",
+            "burnout",
+            "extreme stress",
+            "crying all the time"
+    );
+
     private RiskLevel fallbackRisk(String text) {
+        String lower = text == null ? "" : text.toLowerCase(Locale.ROOT);
+
+        for (String term : HIGH_RISK_TERMS) {
+            if (lower.contains(term)) {
+                return RiskLevel.HIGH;
+            }
+        }
+
+        for (String term : MEDIUM_RISK_TERMS) {
+            if (lower.contains(term)) {
+                return RiskLevel.MEDIUM;
+            }
+        }
+
+        return RiskLevel.LOW;
+    }
+
+   /* private RiskLevel fallbackRisk(String text) {
         String lower = text.toLowerCase(Locale.ROOT);
         if (lower.contains("suicide") || lower.contains("kill myself") || lower.contains("self harm")) {
             return RiskLevel.HIGH;
@@ -290,26 +335,80 @@ public class OciAiService implements AiService {
             return RiskLevel.MEDIUM;
         }
         return RiskLevel.LOW;
-    }
+    }*/
 
-    private List<String> inferIssueTags(String text) {
+    /*private List<String> inferIssueTags(String text) {
         String lower = text.toLowerCase(Locale.ROOT);
         List<String> tags = new ArrayList<>();
-        if (lower.contains("anxiety")) {
+        if (lower.contains("anx")) {
             tags.add("anxiety");
         }
         if (lower.contains("social")) {
             tags.add("social-anxiety");
         }
-        if (lower.contains("lonely") || lower.contains("loneliness")) {
+        if (lower.contains("lone")) {
             tags.add("loneliness");
         }
         if (lower.contains("grief")) {
             tags.add("grief");
         }
+        if (lower.contains("depress") || lower.contains("hopeless") || lower.contains("empty")) {
+            tags.add("depression");
+        }
+        if (lower.contains("panic")) {
+            tags.add("panic-attacks");
+        }
+        if (lower.contains("confidence") || lower.contains("self esteem") || lower.contains("self-esteem")) {
+            tags.add("low-self-esteem");
+        }
+        if (lower.contains("relationship") || lower.contains("partner") || lower.contains("marriage")) {
+            tags.add("relationship-issues");
+        }
+        if (lower.contains("burnout") || lower.contains("work stress") || lower.contains("job")) {
+            tags.add("burnout");
+        }
+        if (lower.contains("sleep") || lower.contains("insomnia")) {
+            tags.add("sleep-issues");
+        }
+        if (lower.contains("trauma") || lower.contains("ptsd")) {
+            tags.add("trauma");
+        }
+        if (lower.contains("anger") || lower.contains("angry")) {
+            tags.add("anger");
+        }
+        if (lower.contains("alcohol") || lower.contains("drugs") || lower.contains("addiction")) {
+            tags.add("substance-use");
+        }
+        if (lower.contains("family") || lower.contains("parents")) {
+            tags.add("family-conflict");
+        }
         if (tags.isEmpty()) {
             tags.add("stress");
         }
+        return tags;
+    }*/
+
+    private List<String> inferIssueTags(String text) {
+        String lower = text.toLowerCase(Locale.ROOT);
+        List<String> tags = new ArrayList<>();
+
+        if (lower.contains("anx")) tags.add("anxiety");
+        if (lower.contains("panic")) tags.add("panic-attacks");
+        if (lower.contains("depress")) tags.add("depression");
+        if (lower.contains("social")) tags.add("social-anxiety");
+        if (lower.contains("lone")) tags.add("loneliness");
+        if (lower.contains("grief")) tags.add("grief");
+        if (lower.contains("confidence") || lower.contains("self esteem")) tags.add("low-self-esteem");
+        if (lower.contains("relationship")) tags.add("relationship-issues");
+        if (lower.contains("burnout") || lower.contains("job")) tags.add("burnout");
+        if (lower.contains("sleep") || lower.contains("insomnia")) tags.add("sleep-issues");
+        if (lower.contains("trauma") || lower.contains("ptsd")) tags.add("trauma");
+        if (lower.contains("anger")) tags.add("anger");
+        if (lower.contains("alcohol") || lower.contains("drugs")) tags.add("substance-use");
+        if (lower.contains("family")) tags.add("family-conflict");
+
+        if (tags.isEmpty()) tags.add("stress");
+
         return tags;
     }
 
