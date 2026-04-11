@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/irene
+    username: irene
+    password: irene
+  jpa:
+    show-sql: false
+
+app:
+  ai:
+    compartment-id: ${OCI_COMPARTMENT_ID:}
+    region: ${OCI_REGION:}
