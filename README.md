@@ -1,17 +1,5 @@
 # Project Irene
 
-AI-assisted privacy-preserving matching engine for affordable therapist-led group sessions.
-
-## What this demo includes
-
-- Java/Spring Boot backend (`backend/`) with modular monolith packages
-- React/Vite frontend (`frontend/`) with intentional visual styling for screen-share demos
-- PostgreSQL via Docker Compose
-- Intake pipeline with AI extraction/risk/embedding abstraction (`mock` and `oci` modes)
-- Matching engine with hard filters + weighted soft scoring
-- Therapist-approved group creation from match results
-- Synthetic seed data for a complete local demo flow
-
 ## Stack
 
 - Backend: Java 17, Spring Boot 3, Maven, JPA, Flyway, JWT Security, OpenAPI
@@ -71,34 +59,6 @@ All users use password `Password@123`.
 
 `backend/src/main/resources/application.yml`:
 
-- `app.ai.mode=mock` (default, deterministic local behavior)
-- `app.ai.mode=oci` (calls configured endpoints)
-
-`application-local.yml` supports:
-
-- `OCI_CHAT_ENDPOINT`
-- `OCI_EMBEDDING_ENDPOINT`
-- `OCI_GENAI_API_KEY`
-- `OCI_CHAT_MODEL`
-- `OCI_EMBEDDING_MODEL`
-- `GEMINI_API_KEY`
-- `GEMINI_MODEL`
-- `GEMINI_EMBEDDING_MODEL`
-- `GEMINI_BASE_URL`
-
-When `AI_MODE=oci`, the backend now attempts OCI first and automatically falls back to Gemini if OCI calls fail and `GEMINI_API_KEY` is configured.
-
-## Public API endpoints (v1)
-
-- `POST /api/v1/auth/register`
-- `POST /api/v1/auth/login`
-- `POST /api/v1/therapist/templates`
-- `GET /api/v1/therapist/templates/{id}`
-- `POST /api/v1/intake/submissions`
-- `POST /api/v1/matching/run/{templateId}`
-- `GET /api/v1/matching/results/{templateId}`
-- `POST /api/v1/groups/create-from-match`
-
 ## Architecture overview
 
 ```mermaid
@@ -112,17 +72,6 @@ flowchart LR
     B --> H["PostgreSQL"]
     B --> I["Flyway Migrations"]
 ```
-
-## 10-minute demo flow (interview script)
-
-1. Login as therapist (`therapist@irene.app`) in UI.
-2. Open therapist template section and create/inspect a template.
-3. Run matching for template `1` and show ranked candidates.
-4. Point out that high-risk intake is excluded from normal matching.
-5. Select candidates and create a group from the run.
-6. Switch to patient account and submit a new intake.
-7. Show the AI output (issue tags, goals, summary, risk level).
-8. Return to therapist and run matching again to show updated cohort list.
 
 ## Key curl examples
 
@@ -184,21 +133,6 @@ curl -X POST http://localhost:8080/api/v1/groups/create-from-match \
     "patientIds":[3,4,5]
   }'
 ```
-
-## Test status
-
-Backend tests are implemented and pass:
-
-```bash
-cd backend
-mvn -Dmaven.repo.local=/tmp/m2 test
-```
-
-Current suite includes:
-
-- `AuthIntegrationTest`
-- `IntakeControllerTest`
-- `MatchingServiceTest`
 
 ## Safety scope for this prototype
 
