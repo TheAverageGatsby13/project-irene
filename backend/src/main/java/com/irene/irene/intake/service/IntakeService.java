@@ -26,6 +26,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 @Service
 public class IntakeService {
 
+    private final org.springframework.jdbc.core.JdbcTemplate db;
     private final CurrentUserService currentUserService;
     private final PatientProfileRepository patientProfileRepository;
     private final IntakeSubmissionRepository intakeSubmissionRepository;
@@ -36,7 +37,8 @@ public class IntakeService {
                          PatientProfileRepository patientProfileRepository,
                          IntakeSubmissionRepository intakeSubmissionRepository,
                          AiFeaturesRepository aiFeaturesRepository,
-                         AiService aiService) {
+                         AiService aiService, org.springframework.jdbc.core.JdbcTemplate db) {
+        this.db = db;
         this.currentUserService = currentUserService;
         this.patientProfileRepository = patientProfileRepository;
         this.intakeSubmissionRepository = intakeSubmissionRepository;
@@ -51,10 +53,20 @@ public class IntakeService {
             throw new ResponseStatusException(FORBIDDEN, "Only patients can submit intake");
         }
 
+        db.queryForObject("SELECT id FROM users WHERE id=? FOR UPDATE", Long.class, currentUser.getId());
+        if (db.queryForObject("SELECT COUNT(*) FROM group_memberships m JOIN therapy_groups g ON g.id=m.group_id WHERE m.patient_id=? AND g.status='ACTIVE' AND m.status<>'DECLINED'", Integer.class, currentUser.getId()) > 0) {
+            throw new ResponseStatusException(BAD_REQUEST, "Withdraw from your active invitation or circle before replacing your intake");
+        }
         if (!request.consentAi() || !request.consentGroup() || !request.notEmergencyAck()) {
             throw new ResponseStatusException(BAD_REQUEST, "AI consent, group consent, and not-emergency acknowledgement are required");
         }
 
+        try { java.time.ZoneId.of(request.timezone()); }
+        catch (Exception ex) { throw new ResponseStatusException(BAD_REQUEST, "Choose a valid time zone"); }
+        for (String slot : request.availabilitySlots()) {
+            if (!slot.matches("(?i)(mon|tue|wed|thu|fri|sat|sun)-([01][0-9]|2[0-3]):[0-5][0-9]"))
+                throw new ResponseStatusException(BAD_REQUEST, "Availability must use day-HH:mm");
+        }
         PatientProfile profile = patientProfileRepository.findByUserId(currentUser.getId())
                 .orElseGet(PatientProfile::new);
         profile.setUser(currentUser);
@@ -76,7 +88,7 @@ public class IntakeService {
         submission.setNotEmergencyAck(request.notEmergencyAck());
         IntakeSubmission savedSubmission = intakeSubmissionRepository.save(submission);
 
-        RiskLevel riskLevel = aiService.detectRisk(savedSubmission.getFreeText());
+        RiskLevel riskLevel = aiService.detectRisk(savedSubmission.getFreeText() + "\n" + savedSubmission.getStructuredAnswers() + "\n" + savedSubmission.getGoalsText());
         ExtractedFeatures extracted = aiService.extractFeatures(savedSubmission);
         float[] vector = aiService.embed(extracted.normalizedText());
 
@@ -87,10 +99,11 @@ public class IntakeService {
         features.setRiskLevel(riskLevel);
         features.setSummary(extracted.summary());
         features.setEmbedding(VectorUtil.serialize(vector));
+        features.setEmbeddingSpace(aiService.embeddingSpace());
         features.setNormalizedText(extracted.normalizedText());
         aiFeaturesRepository.save(features);
 
-        boolean routedToManualReview = riskLevel == RiskLevel.HIGH;
+        boolean routedToManualReview = riskLevel == RiskLevel.HIGH || riskLevel == RiskLevel.REVIEW_REQUIRED;
 
         return new IntakeSubmissionResponse(
                 savedSubmission.getId(),

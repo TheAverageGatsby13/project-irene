@@ -16,7 +16,11 @@ import java.util.Set;
 public class SimilarityScorer {
 
     public double score(ProgramTemplate template, PatientProfile profile, AiFeatures aiFeatures) {
-        double issueSimilarity = issueSimilarity(template, aiFeatures);
+        return score(template, profile, aiFeatures, new float[0]);
+    }
+
+    public double score(ProgramTemplate template, PatientProfile profile, AiFeatures aiFeatures, float[] templateVector) {
+        double issueSimilarity = issueSimilarity(template, aiFeatures, templateVector);
         double goalSimilarity = jaccard(CsvUtil.split(template.getGoalFocus()), CsvUtil.split(aiFeatures.getGoals()));
         double availabilityOverlap = overlapRatio(CsvUtil.split(template.getScheduleWindow()), CsvUtil.split(profile.getAvailabilitySlots()));
         double preferenceFit = preferenceFit(template.getMinGroupSharingComfort(), profile.getGroupSharingComfort());
@@ -24,12 +28,12 @@ public class SimilarityScorer {
         return 0.45 * issueSimilarity + 0.25 * goalSimilarity + 0.20 * availabilityOverlap + 0.10 * preferenceFit;
     }
 
-    private double issueSimilarity(ProgramTemplate template, AiFeatures aiFeatures) {
+    private double issueSimilarity(ProgramTemplate template, AiFeatures aiFeatures, float[] templateVector) {
         List<String> templateIssues = CsvUtil.split(template.getIssueFocus());
         List<String> candidateIssues = CsvUtil.split(aiFeatures.getIssueTags());
         double tagSim = jaccard(templateIssues, candidateIssues);
 
-        float[] templateVector = VectorUtil.deterministicEmbedding(String.join("|", templateIssues), 12);
+        if (templateVector.length == 0) return tagSim;
         float[] candidateVector = VectorUtil.deserialize(aiFeatures.getEmbedding());
         double vectorSim = Math.max(0, VectorUtil.cosineSimilarity(templateVector, candidateVector));
 

@@ -27,7 +27,7 @@ public class ProgramTemplateService {
 
     public ProgramTemplateResponse create(CreateProgramTemplateRequest request) {
         User therapist = currentUserService.requireUser();
-        if (therapist.getRole() != Role.THERAPIST && therapist.getRole() != Role.ADMIN) {
+        if (therapist.getRole() != Role.THERAPIST) {
             throw new ResponseStatusException(FORBIDDEN, "Only therapists can create program templates");
         }
 
@@ -48,14 +48,17 @@ public class ProgramTemplateService {
     }
 
     public ProgramTemplateResponse getById(Long id) {
-        ProgramTemplate template = repository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Template not found"));
-        return toResponse(template);
+        return toResponse(getEntity(id));
     }
 
     public ProgramTemplate getEntity(Long id) {
-        return repository.findById(id)
+        ProgramTemplate template = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Template not found"));
+        User actor = currentUserService.requireUser();
+        if (actor.getRole() != Role.THERAPIST || !template.getTherapist().getId().equals(actor.getId())) {
+            throw new ResponseStatusException(FORBIDDEN, "This program belongs to another therapist");
+        }
+        return template;
     }
 
     public ProgramTemplateResponse toResponse(ProgramTemplate template) {

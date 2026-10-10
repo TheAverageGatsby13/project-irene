@@ -17,3 +17,5 @@ app:
   seed-data: false
   ai:
     mode: mock
+  jwt:
+    secret: test-only-secret-at-least-thirty-two-bytes-long

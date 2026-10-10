@@ -1,0 +1,32 @@
+# Cloud Build needs source, not local records or deployment credentials.
+.gcloudignore
+.git
+.git/**
+#!include:.gitignore
+**/node_modules/**
+**/target/**
+**/dist/**
+**/.irene-demo/**
+**/.env
+**/.env.*
+**/.npmrc
+**/*service-account*.json
+**/*credentials*.json
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/*.log
+**/.DS_Store
+.codex/**
+.agents/**
+.idea/**
+docs/**
+deploy/cloud-run.env.yaml
+deploy/**/env.yaml
+.firebase/**
+.supabase/**
+
+# Private database exports
+**/*.dump
+**/*.backup

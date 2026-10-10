@@ -54,6 +54,9 @@ public class ProgramTemplate {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(name = "timezone", nullable = false)
+    private String timezone = "Asia/Kolkata";
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();
 }

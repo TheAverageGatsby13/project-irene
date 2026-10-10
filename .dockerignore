@@ -1,0 +1,27 @@
+.git
+.idea
+**/node_modules
+**/target
+**/dist
+**/.env*
+**/*.log
+**/.DS_Store
+docs
+
+**/.irene-demo
+
+deploy/**/env.yaml
+deploy/cloud-run.env.yaml
+**/*service-account*.json
+**/*credentials*.json
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/.npmrc
+.firebase
+.supabase
+
+# Private database exports
+**/*.dump
+**/*.backup

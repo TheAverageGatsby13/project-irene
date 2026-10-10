@@ -29,6 +29,9 @@ public class GroupMembership {
     @Column(nullable = false)
     private MembershipStatus status;
 
+    @Column(name = "intake_id")
+    private Long intakeId;
+
     @Column(name = "joined_at", nullable = false)
     private Instant joinedAt = Instant.now();
 }

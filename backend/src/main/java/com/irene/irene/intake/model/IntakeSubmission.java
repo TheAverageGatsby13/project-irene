@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
-
+//input form data
 @Getter
 @Setter
 @Entity
@@ -17,7 +17,7 @@ public class IntakeSubmission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)//many submissions can belong to one user
     @JoinColumn(name = "patient_id", nullable = false)
     private User patient;
 
@@ -38,6 +38,17 @@ public class IntakeSubmission {
 
     @Column(name = "not_emergency_ack", nullable = false)
     private boolean notEmergencyAck;
+
+    @Column(name = "summary_confirmed", nullable = false)
+    private boolean summaryConfirmed;
+    @Column(name = "assigned_therapist_id")
+    private Long assignedTherapistId;
+    @Column(name = "program_id")
+    private Long programId;
+    @Column(name = "review_status", nullable = false)
+    private String reviewStatus = "PENDING";
+    @Column(name = "budget_minor", nullable = false)
+    private int budgetMinor = 100000;
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();

@@ -33,6 +33,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 public class MatchingService {
 
+    private final com.irene.irene.ai.service.AiService aiService;
     private final ProgramTemplateService programTemplateService;
     private final IntakeSubmissionRepository intakeSubmissionRepository;
     private final PatientProfileRepository patientProfileRepository;
@@ -51,7 +52,8 @@ public class MatchingService {
                            HardFilterService hardFilterService,
                            SimilarityScorer similarityScorer,
                            MatchExplanationBuilder explanationBuilder,
-                           CurrentUserService currentUserService) {
+                           CurrentUserService currentUserService, com.irene.irene.ai.service.AiService aiService) {
+        this.aiService = aiService;
         this.programTemplateService = programTemplateService;
         this.intakeSubmissionRepository = intakeSubmissionRepository;
         this.patientProfileRepository = patientProfileRepository;
@@ -66,16 +68,21 @@ public class MatchingService {
     @Transactional
     public MatchRunResponse run(Long templateId) {
         User user = currentUserService.requireUser();
-        if (user.getRole() != Role.THERAPIST && user.getRole() != Role.ADMIN) {
+        if (user.getRole() != Role.THERAPIST) {
             throw new ResponseStatusException(FORBIDDEN, "Only therapists can run matching");
         }
 
         ProgramTemplate template = programTemplateService.getEntity(templateId);
+        float[] templateVector = aiService.embed("issues=" + template.getIssueFocus() + ";goals=" + template.getGoalFocus());
         Map<Long, IntakeSubmission> latestByPatient = latestIntakesByPatient();
         String runId = UUID.randomUUID().toString().substring(0, 12);
         List<MatchCandidate> persisted = new ArrayList<>();
 
         for (IntakeSubmission intake : latestByPatient.values()) {
+            if (!intake.isSummaryConfirmed() || !"APPROVED".equals(intake.getReviewStatus())
+                    || !template.getId().equals(intake.getProgramId())
+                    || !template.getTherapist().getId().equals(intake.getAssignedTherapistId())
+                    || !intake.isConsentAi() || !intake.isConsentGroup()) continue;
             PatientProfile profile = patientProfileRepository.findByUserId(intake.getPatient().getId()).orElse(null);
             AiFeatures aiFeatures = aiFeaturesRepository.findByIntakeSubmissionId(intake.getId()).orElse(null);
             if (profile == null || aiFeatures == null) {
@@ -87,7 +94,7 @@ public class MatchingService {
                 continue;
             }
 
-            double score = similarityScorer.score(template, profile, aiFeatures);
+            double score = similarityScorer.score(template, profile, aiFeatures, aiService.embeddingSpace().equals(aiFeatures.getEmbeddingSpace()) ? templateVector : new float[0]);
             String explanation = explanationBuilder.build(template, profile, aiFeatures, score);
 
             MatchCandidate candidate = new MatchCandidate();
@@ -111,6 +118,7 @@ public class MatchingService {
 
     @Transactional(readOnly = true)
     public MatchRunResponse latestResults(Long templateId) {
+        programTemplateService.getEntity(templateId);
         List<MatchCandidate> candidates = matchCandidateRepository.findByTemplateIdOrderByCreatedAtDesc(templateId);
         if (candidates.isEmpty()) {
             throw new ResponseStatusException(NOT_FOUND, "No matching results found for template");
@@ -129,7 +137,7 @@ public class MatchingService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "AI features not found for candidate"));
         return new MatchCandidateResponse(
                 candidate.getPatient().getId(),
-                candidate.getPatient().getEmail(),
+                "Participant " + candidate.getPatient().getId(),
                 aiFeatures.getRiskLevel(),
                 CsvUtil.split(aiFeatures.getIssueTags()),
                 candidate.getScore(),

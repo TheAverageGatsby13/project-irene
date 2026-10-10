@@ -31,7 +31,7 @@ class AuthIntegrationTest {
                 {
                   "email": "therapist_test@irene.app",
                   "password": "Password@123",
-                  "role": "THERAPIST"
+                  "role": "PATIENT"
                 }
                 """;
 
@@ -40,7 +40,7 @@ class AuthIntegrationTest {
                         .content(registerBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty())
-                .andExpect(jsonPath("$.role").value("THERAPIST"));
+                .andExpect(jsonPath("$.role").value("PATIENT"));
 
         String loginBody = """
                 {
@@ -95,5 +95,14 @@ class AuthIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(templateBody))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void publicRegistrationCannotGrantPrivilegedRoles() throws Exception {
+        for (String role : java.util.List.of("ADMIN", "THERAPIST")) {
+            mockMvc.perform(post("/api/v1/auth/register").contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"email\":\"privileged@irene.example\",\"password\":\"Password@123\",\"role\":\"" + role + "\"}"))
+                    .andExpect(status().isForbidden());
+        }
     }
 }

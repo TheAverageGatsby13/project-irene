@@ -13,9 +13,15 @@ import java.util.Map;
 @Tag(name = "Health")
 public class HealthController {
 
+    @org.springframework.beans.factory.annotation.Value("${app.ai.mode:mock}")
+    private String aiMode;
+
+    @org.springframework.beans.factory.annotation.Value("${app.seed-data:false}")
+    private boolean demoAccounts;
+
     @GetMapping
     @Operation(summary = "Application health ping")
     public Map<String, String> ping() {
-        return Map.of("status", "ok", "service", "project-irene");
+        return Map.of("status", "ok", "service", "project-irene", "aiMode", aiMode, "demoAccounts", String.valueOf(demoAccounts));
     }
 }

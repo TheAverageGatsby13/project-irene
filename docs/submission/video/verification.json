@@ -1,0 +1,11 @@
+{
+  "durationSeconds": 150.12,
+  "resolution": "1920x1080",
+  "framesPerSecond": 30,
+  "videoCodec": "H.264",
+  "audioCodec": "AAC",
+  "fullDecode": "passed",
+  "frameCount": 4503,
+  "sampleFramesInspected": 6,
+  "fileBytes": 8687327
+}

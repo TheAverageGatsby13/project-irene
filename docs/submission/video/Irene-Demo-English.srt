@@ -1,0 +1,183 @@
+1
+00:00:00,200 --> 00:00:01,738
+Support can be expensive.
+
+2
+00:00:01,738 --> 00:00:04,429
+And sharing personal concerns with a room
+
+3
+00:00:04,429 --> 00:00:06,735
+full of strangers can feel difficult.
+
+4
+00:00:06,735 --> 00:00:11,348
+Meet Irene: a private first step toward affordable, therapist led group support.
+
+5
+00:00:12,167 --> 00:00:13,538
+The idea is simple.
+
+6
+00:00:13,538 --> 00:00:17,653
+One therapist leads a suitable group, and the session fee is shared.
+
+7
+00:00:17,653 --> 00:00:20,738
+For example, a twenty four hundred rupee session split
+
+8
+00:00:20,738 --> 00:00:23,481
+between six people is four hundred rupees each.
+
+9
+00:00:23,481 --> 00:00:26,910
+Actual fees and group sizes are set by the therapist.
+
+10
+00:00:27,733 --> 00:00:30,854
+Here is the live app, using a fictional participant.
+
+11
+00:00:30,854 --> 00:00:34,321
+The person chooses a program and begins a private intake.
+
+12
+00:00:34,321 --> 00:00:36,402
+Other participants cannot read their story.
+
+13
+00:00:37,233 --> 00:00:41,375
+They set their availability, sharing comfort, and maximum session budget.
+
+14
+00:00:41,375 --> 00:00:45,103
+These practical constraints matter alongside shared concerns, so a
+
+15
+00:00:45,103 --> 00:00:48,830
+promising match also needs to work in everyday life.
+
+16
+00:00:49,633 --> 00:00:53,399
+With explicit consent, the participant describes their concerns and goals.
+
+17
+00:00:53,399 --> 00:00:56,788
+In this example, a fictional student wants more confidence
+
+18
+00:00:56,788 --> 00:01:00,178
+speaking in class and a stronger sense of connection.
+
+19
+00:01:01,000 --> 00:01:05,456
+Gemini turns that intake into a draft summary and structured matching features.
+
+20
+00:01:05,456 --> 00:01:08,056
+The participant can correct the summary before
+
+21
+00:01:08,056 --> 00:01:10,284
+confirming it for their chosen therapist.
+
+22
+00:01:10,284 --> 00:01:13,997
+Possible risk or uncertainty signals are routed for human review.
+
+23
+00:01:14,800 --> 00:01:17,756
+Next, a verified therapist reviews the confirmed intake.
+
+24
+00:01:17,756 --> 00:01:20,713
+They decide whether the person should be considered
+
+25
+00:01:20,713 --> 00:01:23,670
+for a group or needs an individual conversation.
+
+26
+00:01:23,670 --> 00:01:26,626
+AI does not diagnose or replace that judgment.
+
+27
+00:01:27,433 --> 00:01:31,491
+Google embeddings help compare the meaning of concerns and goals.
+
+28
+00:01:31,491 --> 00:01:35,548
+Irene combines similarity with practical constraints to suggest a circle.
+
+29
+00:01:35,548 --> 00:01:40,417
+The therapist reviews the proposal, sets the session details, and approves invitations.
+
+30
+00:01:41,233 --> 00:01:43,860
+The participant sees the session and exact
+
+31
+00:01:43,860 --> 00:01:46,112
+individual quote, then accepts or declines.
+
+32
+00:01:46,112 --> 00:01:47,988
+This demo collects no payment.
+
+33
+00:01:47,988 --> 00:01:50,615
+The therapist can also generate a private
+
+34
+00:01:50,615 --> 00:01:52,867
+AI preparation brief for the group.
+
+35
+00:01:53,700 --> 00:01:57,392
+Participants can review, export, or delete their intake data.
+
+36
+00:01:57,392 --> 00:02:00,674
+Access is restricted by account role and assignment.
+
+37
+00:02:00,674 --> 00:02:03,545
+The demonstration uses fictional information, and is
+
+38
+00:02:03,545 --> 00:02:06,006
+not a clinical or emergency service.
+
+39
+00:02:06,833 --> 00:02:10,629
+Irene is live on Firebase Hosting and Google Cloud
+
+40
+00:02:10,629 --> 00:02:14,002
+Run, with Gemini, Secret Manager, and Supabase PostgreSQL.
+
+41
+00:02:14,002 --> 00:02:18,220
+Thirty backend tests and thirty five live workflow checks passed.
+
+42
+00:02:18,220 --> 00:02:20,750
+Clinical validation remains a next step.
+
+43
+00:02:21,567 --> 00:02:24,085
+Irene makes the first step private, the
+
+44
+00:02:24,085 --> 00:02:26,603
+grouping thoughtful, and the session cost shared.
+
+45
+00:02:26,603 --> 00:02:28,042
+A little less alone.
+
+46
+00:02:28,042 --> 00:02:29,481
+Explore the live prototype.

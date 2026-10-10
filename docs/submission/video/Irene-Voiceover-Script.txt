@@ -1,0 +1,23 @@
+Support can be expensive. And sharing personal concerns with a room full of strangers can feel difficult. Meet Irene: a private first step toward affordable, therapist led group support.
+
+The idea is simple. One therapist leads a suitable group, and the session fee is shared. For example, a twenty four hundred rupee session split between six people is four hundred rupees each. Actual fees and group sizes are set by the therapist.
+
+Here is the live app, using a fictional participant. The person chooses a program and begins a private intake. Other participants cannot read their story.
+
+They set their availability, sharing comfort, and maximum session budget. These practical constraints matter alongside shared concerns, so a promising match also needs to work in everyday life.
+
+With explicit consent, the participant describes their concerns and goals. In this example, a fictional student wants more confidence speaking in class and a stronger sense of connection.
+
+Gemini turns that intake into a draft summary and structured matching features. The participant can correct the summary before confirming it for their chosen therapist. Possible risk or uncertainty signals are routed for human review.
+
+Next, a verified therapist reviews the confirmed intake. They decide whether the person should be considered for a group or needs an individual conversation. AI does not diagnose or replace that judgment.
+
+Google embeddings help compare the meaning of concerns and goals. Irene combines similarity with practical constraints to suggest a circle. The therapist reviews the proposal, sets the session details, and approves invitations.
+
+The participant sees the session and exact individual quote, then accepts or declines. This demo collects no payment. The therapist can also generate a private AI preparation brief for the group.
+
+Participants can review, export, or delete their intake data. Access is restricted by account role and assignment. The demonstration uses fictional information, and is not a clinical or emergency service.
+
+Irene is live on Firebase Hosting and Google Cloud Run, with Gemini, Secret Manager, and Supabase PostgreSQL. Thirty backend tests and thirty five live workflow checks passed. Clinical validation remains a next step.
+
+Irene makes the first step private, the grouping thoughtful, and the session cost shared. A little less alone. Explore the live prototype.

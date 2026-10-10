@@ -30,3 +30,35 @@ frontend/.vite/
 
 # backend build output
 backend/target/
+
+# Private deployment configuration and credentials
+.env
+.env.*
+!.env.example
+deploy/cloud-run.env.yaml
+**/service-account*.json
+
+.irene-demo/
+backend/.irene-demo/
+
+# Hybrid deployment local settings
+deploy/**/env.yaml
+frontend/.env.production.local
+.firebase/
+.firebaserc
+firebase-debug.log*
+.supabase/
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+!frontend/.env.production.example
+
+# Private database exports
+**/*.dump
+**/*.backup
+**/*credentials*.json
+**/*service-account*.json
+
+# Generated artifacts in any Java module
+**/target/

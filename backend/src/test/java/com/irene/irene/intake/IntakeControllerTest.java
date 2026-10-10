@@ -66,6 +66,7 @@ class IntakeControllerTest {
         patient.setRole(Role.PATIENT);
         userRepository.save(patient);
 
+        when(aiService.embeddingSpace()).thenReturn("mock-v1");
         when(aiService.detectRisk(anyString())).thenReturn(RiskLevel.MEDIUM);
         when(aiService.extractFeatures(any())).thenReturn(new ExtractedFeatures(
                 java.util.List.of("anxiety", "loneliness"),

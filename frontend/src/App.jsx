@@ -1,419 +1,170 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Workspace from './Workspace';
+import CircleBloom from './CircleBloom';
+import { resolveAccess } from './authRouting';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8080/api/v1';
-
-const initialTemplateForm = {
-  title: 'College Stress & Anxiety',
-  description: 'Therapist-led support for anxiety, overthinking, and social pressure.',
-  issueFocus: 'anxiety,stress,social-anxiety',
-  goalFocus: 'confidence,regulation,routine',
-  targetSize: 8,
-  scheduleWindow: 'mon-19:00,wed-19:00',
-  languageCode: 'en',
-  region: 'IN',
-  targetAgeBand: '18-24',
-  minGroupSharingComfort: 'MEDIUM'
-};
+const API_BASE = import.meta.env.VITE_API_BASE || '/api/v1';
 
 function App() {
   const [auth, setAuth] = useState(null);
-  const [status, setStatus] = useState('Welcome to Project Irene.');
+  const [status, setStatus] = useState('Explore Irene with fictional profiles only.');
+  const [rawAiMode,setRawAiMode]=useState('mock');
+  const [demo,setDemo]=useState(false);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' }); }, [auth]);
+  useEffect(() => {
+    fetch(`${API_BASE}/health`).then(r => { if (!r.ok) throw new Error(); return r.json(); })
+      .then(data => { setRawAiMode(data.aiMode);setDemo(data.demoAccounts==='true'); })
+      .catch(() => setStatus('We couldn’t connect to Irene. Please try again shortly.'));
+  }, []);
 
   return (
-    <div className="app-shell">
-      <div className="ambient-glow glow-left" />
-      <div className="ambient-glow glow-right" />
+    <div className={`app-shell ${auth ? 'signed-in' : 'landing'}`}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <nav className="topbar" aria-label="Main navigation">
+        <a href="#" className="wordmark"><span className="brand-mark">i</span> irene<span className="brand-dot">.</span></a>
+        <span className="nav-note">A little support. A shared beginning.</span>
+        {!auth && <a className="nav-login" href="#your-space">Enter your space <span aria-hidden="true">↗</span></a>}
+        <span className="demo-pill">Research prototype</span>
+      </nav>
+      {!auth && <>
+      <main id="main-content">
       <header className="hero fade-up">
-        <p className="eyebrow">Project Irene</p>
-        <h1>AI-assisted cohorting for affordable group therapy</h1>
-        <p className="hero-subtitle">
-          Therapist approval required, with crisis-risk exclusion from regular matching.
-        </p>
+        <div className="hero-copy">
+          <p className="eyebrow"><span className="sun-dot"/> SUPPORT, WITH ROOM FOR YOU</p>
+          <h1>A little<br/>less <em>alone.</em></h1>
+          <p className="hero-subtitle">Some things feel lighter when they’re shared. Find your way to therapist-led group support, at a cost you share together.</p>
+          <div className="hero-actions"><a className="btn" href="#your-space">Find your circle <span aria-hidden="true">↗</span></a><a className="text-link" href="#how-it-works">How it works <span aria-hidden="true">↓</span></a></div>
+          <div className="hero-footnote"><span className="tiny-circles" aria-hidden="true"><i/><i/><i/></span><span>Your story is yours.<br/>You choose the next step.</span></div>
+        </div>
+        <CircleBloom/>
       </header>
-
+      <section className="journey-section" id="how-it-works" aria-labelledby="journey-heading">
+        <div className="section-intro"><p className="eyebrow">A SHARED BEGINNING</p><h2 id="journey-heading">Small steps.<br/><em>Human connection.</em></h2><p>No need to have the perfect words.<br/>Start where you are.</p></div>
+        <div className="journey" aria-label="How Irene works">
+          <article><span>01</span><div><h3>A private first step</h3><p>Share what you need through a private intake. Other participants never see it.</p></div></article>
+          <article><span>02</span><div><h3>A little common ground</h3><p>AI helps compare shared concerns and goals. Your language and availability help shape a suitable circle.</p></div></article>
+          <article><span>03</span><div><h3>A human to guide you</h3><p>AI prepares a draft summary for you to check. A therapist reviews every group, and you choose whether to join.</p></div></article>
+        </div>
+      </section>
+      <section className="shared-section" aria-labelledby="shared-heading">
+        <div className="shared-copy"><p className="eyebrow">SHARE THE SESSION. SHARE THE COST.</p><h2 id="shared-heading">More connection.<br/><em>A lighter cost.</em></h2><p>One therapist-led session, with the fee divided across your circle. A simple idea that makes a first step feel a little more within reach.</p><span className="editorial-note">Together looks different for everyone.</span></div>
+        <AffordabilityCard/>
+      </section>
+      </main>
+      </>}
       {!auth && (
         <LoginCard
+          demo={demo}
           onAuthenticated={setAuth}
           setStatus={setStatus}
         />
       )}
 
-      {auth && (
-        <div className="workspace fade-up delay-1">
-          <div className="workspace-header card">
-            <div>
-              <h2>Signed in as {auth.email}</h2>
-              <p className="muted">Role: {auth.role}</p>
-            </div>
-            <button
-              className="btn secondary"
-              onClick={() => {
-                setAuth(null);
-                setStatus('Logged out.');
-              }}
-            >
-              Logout
-            </button>
-          </div>
+      {auth && <Workspace auth={auth} demo={demo} aiMode={rawAiMode} onLogout={()=>{setAuth(null);setStatus('Signed out.');}}/>}
 
-          {auth.role === 'PATIENT' && (
-            <PatientIntake token={auth.token} setStatus={setStatus} />
-          )}
-          {(auth.role === 'THERAPIST' || auth.role === 'ADMIN') && (
-            <TherapistDashboard token={auth.token} setStatus={setStatus} />
-          )}
-        </div>
-      )}
-
-      <footer className="status-bar card fade-up delay-2">{status}</footer>
+      <footer className="status-bar" role="status" aria-live="polite">{status}</footer>
+      <p className="footer-note">Irene is a prototype, not an emergency service. No one is monitoring this demo. Group members are asked to keep sessions private.</p>
     </div>
   );
 }
 
-function LoginCard({ onAuthenticated, setStatus }) {
+function LoginCard({ onAuthenticated, setStatus, demo }) {
   const [mode, setMode] = useState('login');
-  const [email, setEmail] = useState('therapist@irene.app');
-  const [password, setPassword] = useState('Password@123');
-  const [role, setRole] = useState('PATIENT');
+  const [access, setAccess] = useState('participant');
+  const [error, setError] = useState('');
+  const accessLabel = { participant: 'Participant', therapist: 'Therapist', admin: 'Admin' }[access];
+  function chooseAccess(next) { setAccess(next); setMode('login'); setError(''); }
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
     setBusy(true);
+    setError('');
     setStatus('Authenticating...');
 
     try {
       const endpoint = mode === 'login' ? '/auth/login' : '/auth/register';
-      const payload = mode === 'login' ? { email, password } : { email, password, role };
+      const payload = mode === 'login' ? { email, password } : { email, password, role: 'PATIENT' };
       const res = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      const body = await res.json();
+      const body = await readResponse(res);
       if (!res.ok) {
         throw new Error(body.message || 'Request failed');
       }
-      onAuthenticated(body);
+      onAuthenticated({ ...body, ...resolveAccess(access, body.role) });
       setStatus('Authentication successful.');
     } catch (err) {
-      setStatus(`Auth failed: ${err.message}`);
+      setError(err.message);
+      setStatus('Sign-in needs your attention.');
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <section className="card auth-card fade-up delay-1">
-      <h2>{mode === 'login' ? 'Login' : 'Register'}</h2>
+    <section id="your-space" className="auth-section fade-up delay-1" aria-labelledby="auth-heading">
+      <div className="auth-aside"><span className="eyebrow">A SPACE TO BE YOURSELF</span><h2>Your next chapter<br/>starts with a<br/><em>small hello.</em></h2><p>Take a look around with a fictional profile. There’s room to explore at your own pace.</p><span className="auth-flower" aria-hidden="true">✳</span></div>
+      <div className="auth-card">
+      <p className="eyebrow">YOUR NEXT SMALL STEP</p>
+      <h2 id="auth-heading">{mode === 'login' ? { participant: 'Welcome to your space', therapist: 'Your therapist space', admin: 'Irene administration' }[access] : access === 'therapist' ? 'Begin your therapist application' : 'Create a participant account'}</h2>
+      <div className="access-switch" role="group" aria-label="Choose your sign-in space">
+        {['participant', 'therapist', 'admin'].map(value => <button key={value} type="button" aria-pressed={access === value} disabled={busy} onClick={() => chooseAccess(value)}>{ { participant: 'Participant', therapist: 'Therapist', admin: 'Admin' }[value]}</button>)}
+      </div>
+      <p className="access-help muted">{access === 'admin' ? 'Sign in with your administrator account. Admin access is assigned privately; public registration does not grant it.' : access === 'therapist' ? 'Approved therapists can sign in here. New professionals can create an account and submit their qualifications for administrator review.' : 'Sign in or create an account using fictional details. Your account opens the workspace for its approved role.'}</p>
+      {error && <div className="notice error" role="alert">{error}</div>}
+      {mode === 'login' && demo && <div className="chip-row">
+        <button className="chip" onClick={() => { chooseAccess('participant'); setEmail('patient1@irene.app'); setPassword('Password@123'); }}>Participant demo</button>
+        <button className="chip" onClick={() => { chooseAccess('therapist'); setEmail('therapist@irene.app'); setPassword('Password@123'); }}>Therapist demo</button>
+        <button className="chip" onClick={() => { chooseAccess('admin'); setEmail('admin@irene.app'); setPassword('Password@123'); }}>Administrator demo</button>
+      </div>}
       <form onSubmit={submit} className="form-grid">
         <label>
           Email
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
+          <input autoComplete="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} type="email" required />
         </label>
         <label>
           Password
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
+          <input autoComplete={mode === 'login' ? 'current-password' : 'new-password'} placeholder="Your password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" required />
         </label>
-        {mode === 'register' && (
-          <label>
-            Role
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="PATIENT">PATIENT</option>
-              <option value="THERAPIST">THERAPIST</option>
-              <option value="ADMIN">ADMIN</option>
-            </select>
-          </label>
-        )}
         <button className="btn" disabled={busy} type="submit">
-          {busy ? 'Please wait...' : mode === 'login' ? 'Login' : 'Register'}
+          {busy ? 'Please wait...' : mode === 'login' ? `Sign in · ${accessLabel}` : access === 'therapist' ? 'Create account & apply' : 'Create account'}
         </button>
       </form>
-      <button
+      {access !== 'admin' && <button
         className="link-btn"
+        disabled={busy}
         type="button"
-        onClick={() => setMode((prev) => (prev === 'login' ? 'register' : 'login'))}
+        onClick={() => { setMode((prev) => (prev === 'login' ? 'register' : 'login')); setError(''); }}
       >
-        {mode === 'login' ? 'Need an account? Register' : 'Already have an account? Login'}
-      </button>
+        {mode === 'login' ? access === 'therapist' ? 'New professional? Apply for therapist access' : 'Need an account? Register' : 'Already have an account? Sign in'}
+      </button>}
+      </div>
     </section>
   );
 }
 
-function PatientIntake({ token, setStatus }) {
-  const [form, setForm] = useState({
-    ageBand: '18-24',
-    languageCode: 'en',
-    timezone: 'Asia/Kolkata',
-    region: 'IN',
-    availabilitySlots: 'mon-19:00,wed-19:00',
-    groupSharingComfort: 'MEDIUM',
-    structuredAnswers: '{"stress":"high","sleep":"medium"}',
-    freeText: 'I feel anxiety in social settings and loneliness in college life.',
-    goals: 'confidence,connection',
-    consentAi: true,
-    consentGroup: true,
-    notEmergencyAck: true
-  });
-  const [response, setResponse] = useState(null);
-  const [busy, setBusy] = useState(false);
-
-  async function submit(e) {
-    e.preventDefault();
-    setBusy(true);
-    setStatus('Submitting intake and running AI pipeline...');
-    try {
-      const payload = {
-        ...form,
-        availabilitySlots: toArray(form.availabilitySlots),
-        goals: toArray(form.goals)
-      };
-      const res = await fetch(`${API_BASE}/intake/submissions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-      const body = await res.json();
-      if (!res.ok) {
-        throw new Error(body.message || 'Intake submission failed');
-      }
-      setResponse(body);
-      setStatus('Intake submitted successfully.');
-    } catch (err) {
-      setStatus(`Intake failed: ${err.message}`);
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  return (
-    <section className="card">
-      <h2>Patient Intake</h2>
-      <p className="muted">This flow captures consent, normalizes concerns, scores risk, and stores matching features.</p>
-      <form onSubmit={submit} className="form-grid two-col">
-        <label>
-          Age Band
-          <input value={form.ageBand} onChange={(e) => setForm({ ...form, ageBand: e.target.value })} required />
-        </label>
-        <label>
-          Language
-          <input value={form.languageCode} onChange={(e) => setForm({ ...form, languageCode: e.target.value })} required />
-        </label>
-        <label>
-          Timezone
-          <input value={form.timezone} onChange={(e) => setForm({ ...form, timezone: e.target.value })} required />
-        </label>
-        <label>
-          Region
-          <input value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })} required />
-        </label>
-        <label>
-          Availability (comma-separated)
-          <input value={form.availabilitySlots} onChange={(e) => setForm({ ...form, availabilitySlots: e.target.value })} required />
-        </label>
-        <label>
-          Sharing Comfort
-          <select value={form.groupSharingComfort} onChange={(e) => setForm({ ...form, groupSharingComfort: e.target.value })}>
-            <option value="LOW">LOW</option>
-            <option value="MEDIUM">MEDIUM</option>
-            <option value="HIGH">HIGH</option>
-          </select>
-        </label>
-        <label className="full-width">
-          Structured Answers JSON
-          <textarea rows={3} value={form.structuredAnswers} onChange={(e) => setForm({ ...form, structuredAnswers: e.target.value })} />
-        </label>
-        <label className="full-width">
-          Free Text Concern
-          <textarea rows={4} value={form.freeText} onChange={(e) => setForm({ ...form, freeText: e.target.value })} required />
-        </label>
-        <label className="full-width">
-          Goals (comma-separated)
-          <input value={form.goals} onChange={(e) => setForm({ ...form, goals: e.target.value })} required />
-        </label>
-        <label className="check"><input type="checkbox" checked={form.consentAi} onChange={(e) => setForm({ ...form, consentAi: e.target.checked })} /> AI-assisted matching consent</label>
-        <label className="check"><input type="checkbox" checked={form.consentGroup} onChange={(e) => setForm({ ...form, consentGroup: e.target.checked })} /> Group-therapy participation consent</label>
-        <label className="check"><input type="checkbox" checked={form.notEmergencyAck} onChange={(e) => setForm({ ...form, notEmergencyAck: e.target.checked })} /> Not-for-emergency acknowledgement</label>
-        <button className="btn full-width" type="submit" disabled={busy}>{busy ? 'Submitting...' : 'Submit Intake'}</button>
-      </form>
-
-      {response && (
-        <div className="result-box">
-          <h3>AI Output</h3>
-          <p><strong>Risk:</strong> {response.riskLevel}</p>
-          <p><strong>Issue Tags:</strong> {response.issueTags.join(', ')}</p>
-          <p><strong>Goals:</strong> {response.goals.join(', ')}</p>
-          <p><strong>Summary:</strong> {response.summary}</p>
-          {response.routedToManualReview && <p className="alert">High-risk intake routed to manual review and excluded from normal matching.</p>}
-        </div>
-      )}
-    </section>
-  );
+async function readResponse(res) {
+  try { return await res.json(); }
+  catch { throw new Error('The service could not respond. Please try again shortly.'); }
 }
 
-function TherapistDashboard({ token, setStatus }) {
-  const [templateForm, setTemplateForm] = useState(initialTemplateForm);
-  const [templateId, setTemplateId] = useState('1');
-  const [runResult, setRunResult] = useState(null);
-  const [selectedPatients, setSelectedPatients] = useState([]);
-  const [groupTitle, setGroupTitle] = useState('Anxiety Cohort - Week 1');
-
-  async function createTemplate(e) {
-    e.preventDefault();
-    setStatus('Creating program template...');
-    try {
-      const payload = {
-        ...templateForm,
-        issueFocus: toArray(templateForm.issueFocus),
-        goalFocus: toArray(templateForm.goalFocus),
-        scheduleWindow: toArray(templateForm.scheduleWindow),
-        targetSize: Number(templateForm.targetSize)
-      };
-      const res = await api('/therapist/templates', token, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-      setTemplateId(String(res.id));
-      setStatus(`Template created with id ${res.id}.`);
-    } catch (err) {
-      setStatus(`Template creation failed: ${err.message}`);
-    }
-  }
-
-  async function runMatch() {
-    setStatus('Running matching engine...');
-    try {
-      const res = await api(`/matching/run/${templateId}`, token, { method: 'POST' });
-      setRunResult(res);
-      setSelectedPatients([]);
-      setStatus(`Matching run ${res.runId} completed with ${res.candidates.length} candidates.`);
-    } catch (err) {
-      setStatus(`Matching failed: ${err.message}`);
-    }
-  }
-
-  async function createGroup() {
-    if (!runResult || selectedPatients.length === 0) {
-      setStatus('Select at least one candidate before creating group.');
-      return;
-    }
-    setStatus('Creating therapist-approved group...');
-    try {
-      const res = await api('/groups/create-from-match', token, {
-        method: 'POST',
-        body: JSON.stringify({
-          templateId: Number(templateId),
-          runId: runResult.runId,
-          title: groupTitle,
-          patientIds: selectedPatients
-        })
-      });
-      setStatus(`Group ${res.groupId} created with ${res.patientIds.length} invited members.`);
-    } catch (err) {
-      setStatus(`Group creation failed: ${err.message}`);
-    }
-  }
-
-  function togglePatient(id) {
-    setSelectedPatients((prev) =>
-      prev.includes(id) ? prev.filter((value) => value !== id) : [...prev, id]
-    );
-  }
-
-  return (
-    <div className="dashboard-grid">
-      <section className="card">
-        <h2>Therapist Program Template</h2>
-        <form className="form-grid" onSubmit={createTemplate}>
-          {Object.entries(templateForm).map(([key, value]) => (
-            <label key={key}>
-              {humanize(key)}
-              <input
-                value={value}
-                onChange={(e) => setTemplateForm({ ...templateForm, [key]: e.target.value })}
-                required
-              />
-            </label>
-          ))}
-          <button className="btn" type="submit">Create Template</button>
-        </form>
-      </section>
-
-      <section className="card">
-        <h2>Run Matching</h2>
-        <label>
-          Template ID
-          <input value={templateId} onChange={(e) => setTemplateId(e.target.value)} />
-        </label>
-        <button className="btn" onClick={runMatch}>Run Match</button>
-
-        {runResult && (
-          <>
-            <p className="muted">Run ID: <code>{runResult.runId}</code></p>
-            <div className="candidate-list">
-              {runResult.candidates.map((candidate) => (
-                <article key={candidate.patientId} className="candidate-card">
-                  <label className="check">
-                    <input
-                      type="checkbox"
-                      checked={selectedPatients.includes(candidate.patientId)}
-                      onChange={() => togglePatient(candidate.patientId)}
-                    />
-                    Select for cohort
-                  </label>
-                  <h3>{candidate.patientEmail}</h3>
-                  <p><strong>Risk:</strong> {candidate.riskLevel}</p>
-                  <p><strong>Score:</strong> {candidate.score.toFixed(3)}</p>
-                  <p><strong>Issue Tags:</strong> {candidate.issueTags.join(', ')}</p>
-                  <p className="muted">{candidate.explanation}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="group-actions">
-              <label>
-                Group Title
-                <input value={groupTitle} onChange={(e) => setGroupTitle(e.target.value)} />
-              </label>
-              <button className="btn" onClick={createGroup}>Create Group from Selection</button>
-            </div>
-          </>
-        )}
-      </section>
-    </div>
-  );
-}
-
-function toArray(csv) {
-  return csv
-    .split(',')
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-async function api(path, token, options = {}) {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...(options.headers || {})
-    }
-  });
-  const body = await res.json();
-  if (!res.ok) {
-    throw new Error(body.message || 'Request failed');
-  }
-  return body;
-}
-
-function humanize(value) {
-  return value
-    .replace(/([A-Z])/g, ' $1')
-    .replace(/^./, (char) => char.toUpperCase());
+function AffordabilityCard() {
+  const [members, setMembers] = useState(6);
+  const fee = 2400;
+  return <aside className="cost-card" aria-label="Illustrative shared session cost">
+    <div className="cost-heading"><p className="eyebrow">THE TOGETHER EFFECT</p><span className="state-badge">Illustrative pricing</span></div>
+    <div className="circle-art" aria-hidden="true">{Array.from({ length: members }, (_, i) => <span key={i} style={{ transform: `rotate(${i * 360 / members}deg) translateY(-53px)` }} />)}<b>{members}<small>in your circle</small></b></div>
+    <div className="cost-number" aria-live="polite">₹{Math.ceil(fee / members)}<span>per person / session</span></div>
+    <label className="cost-slider">{members} people sharing an illustrative ₹2,400 session
+      <input aria-valuetext={`${members} people, ₹${Math.ceil(fee / members)} per person`} aria-label="Number of participants" type="range" min="4" max="8" value={members} onChange={e => setMembers(Number(e.target.value))} />
+    </label>
+    <p className="cost-caption">An example, not a quote. Actual fees, group size, and suitability are set with the therapist. Other charges may apply.</p>
+  </aside>;
 }
 
 export default App;

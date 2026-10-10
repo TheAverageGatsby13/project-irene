@@ -14,6 +14,8 @@ import java.util.Locale;
 public class HardFilterService {
 
     public boolean passes(ProgramTemplate template, PatientProfile profile, RiskLevel riskLevel) {
+        if (!template.isActive() || (template.getTimezone() != null && profile.getTimezone() != null
+                && !template.getTimezone().equals(profile.getTimezone()))) return false;
         if (!template.getLanguageCode().equalsIgnoreCase(profile.getLanguageCode())) {
             return false;
         }
@@ -23,7 +25,7 @@ public class HardFilterService {
         if (!template.getTargetAgeBand().equalsIgnoreCase(profile.getAgeBand())) {
             return false;
         }
-        if (riskLevel == RiskLevel.HIGH) {
+        if (riskLevel == null || riskLevel == RiskLevel.HIGH || riskLevel == RiskLevel.REVIEW_REQUIRED) {
             return false;
         }
 

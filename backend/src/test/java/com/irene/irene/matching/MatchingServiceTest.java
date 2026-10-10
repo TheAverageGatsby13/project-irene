@@ -67,4 +67,18 @@ class MatchingServiceTest {
 
         assertThat(passed).isFalse();
     }
+
+    @Test
+    void highAndUnknownRiskCannotEnterRegularMatching() {
+        ProgramTemplate t = new ProgramTemplate();
+        t.setLanguageCode("en"); t.setRegion("IN"); t.setTargetAgeBand("18-24");
+        t.setScheduleWindow("mon-19:00"); t.setMinGroupSharingComfort("LOW");
+        PatientProfile p = new PatientProfile();
+        p.setLanguageCode("en"); p.setRegion("IN"); p.setAgeBand("18-24");
+        p.setAvailabilitySlots("mon-19:00"); p.setGroupSharingComfort(GroupSharingComfort.HIGH);
+        assertThat(hardFilterService.passes(t, p, com.irene.irene.ai.model.RiskLevel.LOW)).isTrue();
+        assertThat(hardFilterService.passes(t, p, com.irene.irene.ai.model.RiskLevel.HIGH)).isFalse();
+        assertThat(hardFilterService.passes(t, p, com.irene.irene.ai.model.RiskLevel.REVIEW_REQUIRED)).isFalse();
+        assertThat(hardFilterService.passes(t, p, null)).isFalse();
+    }
 }

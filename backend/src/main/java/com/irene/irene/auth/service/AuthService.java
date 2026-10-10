@@ -34,6 +34,10 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        if (request.role() != com.irene.irene.auth.model.Role.PATIENT) {
+            throw new ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN,
+                    "Therapist and administrator accounts require verification");
+        }
         if (userRepository.existsByEmailIgnoreCase(request.email())) {
             throw new ResponseStatusException(BAD_REQUEST, "Email already registered");
         }

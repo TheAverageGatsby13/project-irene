@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+//a blueprint for one DB row that stores AI analysis (tags, goals, risk, summary, embedding) for exactly one intake submission, with validation constraints (required fields + max lengths) baked into the mapping.
 @Getter
 @Setter
 @Entity
@@ -39,6 +40,9 @@ public class AiFeatures {
 
     @Column(name = "normalized_text", nullable = false, length = 4000)
     private String normalizedText;
+
+    @Column(name = "embedding_space", nullable = false)
+    private String embeddingSpace = "legacy";
 
     @Column(name = "created_at", nullable = false)
     private Instant createdAt = Instant.now();

@@ -29,6 +29,7 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Service
 public class GroupService {
 
+    private final com.irene.irene.intake.repository.IntakeSubmissionRepository intakes;
     private final CurrentUserService currentUserService;
     private final ProgramTemplateService programTemplateService;
     private final MatchCandidateRepository matchCandidateRepository;
@@ -41,7 +42,9 @@ public class GroupService {
                         MatchCandidateRepository matchCandidateRepository,
                         UserRepository userRepository,
                         TherapyGroupRepository therapyGroupRepository,
-                        GroupMembershipRepository groupMembershipRepository) {
+                        GroupMembershipRepository groupMembershipRepository,
+                        com.irene.irene.intake.repository.IntakeSubmissionRepository intakes) {
+        this.intakes = intakes;
         this.currentUserService = currentUserService;
         this.programTemplateService = programTemplateService;
         this.matchCandidateRepository = matchCandidateRepository;
@@ -53,11 +56,16 @@ public class GroupService {
     @Transactional
     public GroupResponse createFromMatch(CreateGroupFromMatchRequest request) {
         User actor = currentUserService.requireUser();
-        if (actor.getRole() != Role.THERAPIST && actor.getRole() != Role.ADMIN) {
+        if (actor.getRole() != Role.THERAPIST) {
             throw new ResponseStatusException(FORBIDDEN, "Only therapists can create groups");
         }
 
         ProgramTemplate template = programTemplateService.getEntity(request.templateId());
+        if (!template.isActive()) throw new ResponseStatusException(BAD_REQUEST, "Program is inactive");
+        if (request.patientIds().size() < 2 || request.patientIds().size() > template.getTargetSize()
+                || new java.util.HashSet<>(request.patientIds()).size() != request.patientIds().size()) {
+            throw new ResponseStatusException(BAD_REQUEST, "Choose distinct participants within the program capacity (minimum two)");
+        }
         var candidates = matchCandidateRepository.findByTemplateIdAndRunIdOrderByScoreDesc(request.templateId(), request.runId());
         if (candidates.isEmpty()) {
             throw new ResponseStatusException(BAD_REQUEST, "Invalid runId or templateId");
@@ -67,6 +75,20 @@ public class GroupService {
         for (Long patientId : request.patientIds()) {
             if (!matchedIds.contains(patientId)) {
                 throw new ResponseStatusException(BAD_REQUEST, "Patient " + patientId + " not found in selected run");
+            }
+        }
+
+        for (Long id : request.patientIds()) {
+            var candidate = candidates.stream().filter(c -> c.getPatient().getId().equals(id)).findFirst().orElseThrow();
+            var latest = intakes.findTopByPatientIdOrderByCreatedAtDesc(id).orElseThrow();
+            if (!latest.isSummaryConfirmed() || !"APPROVED".equals(latest.getReviewStatus())
+                    || !template.getId().equals(latest.getProgramId())
+                    || !template.getTherapist().getId().equals(latest.getAssignedTherapistId())) {
+                throw new ResponseStatusException(BAD_REQUEST, "Every participant needs a current suitability review");
+            }
+            if (!candidate.isHardFilterPass() || !latest.getId().equals(candidate.getIntakeSubmission().getId())
+                    || !latest.isConsentAi() || !latest.isConsentGroup() || !latest.isNotEmergencyAck()) {
+                throw new ResponseStatusException(BAD_REQUEST, "Intake changed or consent is missing; run matching again");
             }
         }
 
@@ -86,6 +108,7 @@ public class GroupService {
             membership.setGroup(savedGroup);
             membership.setPatient(patient);
             membership.setStatus(MembershipStatus.INVITED);
+            membership.setIntakeId(intakes.findTopByPatientIdOrderByCreatedAtDesc(patientId).orElseThrow().getId());
             groupMembershipRepository.save(membership);
             createdPatientIds.add(patientId);
         }

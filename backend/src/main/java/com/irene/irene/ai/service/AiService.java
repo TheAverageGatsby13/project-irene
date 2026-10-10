@@ -8,4 +8,5 @@ public interface AiService {
     RiskLevel detectRisk(String intakeText);
     ExtractedFeatures extractFeatures(IntakeSubmission submission);
     float[] embed(String normalizedText);
+    default String embeddingSpace() { return "mock-v1"; }
 }

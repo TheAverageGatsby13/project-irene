@@ -1,12 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/irene
-    username: irene
-    password: irene
-  jpa:
-    show-sql: false
-
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/irene}
+    username: ${DATABASE_USER:irene}
+    password: ${DATABASE_PASSWORD:irene}
 app:
-  ai:
-    compartment-id: ${OCI_COMPARTMENT_ID:}
-    region: ${OCI_REGION:}
+  jwt:
+    secret: ${APP_JWT_SECRET:local-demo-only-change-before-deployment-32-bytes}
+  seed-data: true

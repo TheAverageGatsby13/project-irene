@@ -31,6 +31,7 @@ public class DataSeeder implements CommandLineRunner {
     @Value("${app.seed-data:true}")
     private boolean seedData;
 
+    private final org.springframework.jdbc.core.JdbcTemplate db;
     private final UserRepository userRepository;
     private final PatientProfileRepository patientProfileRepository;
     private final IntakeSubmissionRepository intakeSubmissionRepository;
@@ -45,7 +46,8 @@ public class DataSeeder implements CommandLineRunner {
                       AiFeaturesRepository aiFeaturesRepository,
                       ProgramTemplateRepository programTemplateRepository,
                       PasswordEncoder passwordEncoder,
-                      AiService aiService) {
+                      AiService aiService, org.springframework.jdbc.core.JdbcTemplate db) {
+        this.db = db;
         this.userRepository = userRepository;
         this.patientProfileRepository = patientProfileRepository;
         this.intakeSubmissionRepository = intakeSubmissionRepository;
@@ -63,6 +65,8 @@ public class DataSeeder implements CommandLineRunner {
 
         User admin = createUser("admin@irene.app", Role.ADMIN);
         User therapist = createUser("therapist@irene.app", Role.THERAPIST);
+        db.update("INSERT INTO therapist_credentials(user_id,display_name,qualification,registration_reference,region,status,review_note) VALUES(?,?,?,?,?,?,?)",
+                therapist.getId(), "Maya Sen · fictional therapist", "Synthetic demonstration profile", "DEMO-ONLY", "IN", "VERIFIED", "Seeded fictional profile; not a real credential verification");
 
         ProgramTemplate anxiety = new ProgramTemplate();
         anxiety.setTherapist(therapist);
@@ -147,8 +151,14 @@ public class DataSeeder implements CommandLineRunner {
             ai.setRiskLevel(risk);
             ai.setSummary(extracted.summary());
             ai.setEmbedding(VectorUtil.serialize(embedding));
+            ai.setEmbeddingSpace(aiService.embeddingSpace());
             ai.setNormalizedText(extracted.normalizedText());
             aiFeaturesRepository.save(ai);
+            intake.setSummaryConfirmed(true);
+            intake.setAssignedTherapistId(therapist.getId());
+            intake.setProgramId(anxiety.getId());
+            intake.setReviewStatus((risk == RiskLevel.HIGH || risk == RiskLevel.REVIEW_REQUIRED) ? "INDIVIDUAL" : "APPROVED");
+            intakeSubmissionRepository.save(intake);
         }
     }
 
