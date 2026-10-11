@@ -1,8 +1,8 @@
 # Release verification
 
-Verified October 6, 2026 against the completed local synthetic application.
+Current published-release evidence: **30 backend tests, 6 frontend role-routing tests, a successful production frontend build, and 35 live workflow checks**. The sections below distinguish the earlier local baseline from deployment and publication checks.
 
-## Completed checks
+## Initial local baseline — 6 October 2026
 
 - Backend: 25 tests, zero failures/errors/skips, including the full intake-to-feedback journey.
 - Frontend: production build succeeds; the one-step launcher starts the packaged app with embedded persistent storage. Accepted invitation state survives restart.
@@ -26,14 +26,20 @@ Verified October 6, 2026 against the completed local synthetic application.
 
 See [deployment status](DEPLOYMENT_STATUS.md) for exact resources, revision and Hosting release.
 
-## Checks still requiring external setup
+## Optional integrations and real-service validation
 
 Vertex/DLP and the alternative Cloud SQL profile remain untested; the deployed profile uses the Gemini Developer API and Supabase. Real Meet host/identity settings, comprehensive abuse controls, failure recovery, load testing and long-term costs remain unverified. Public-site checks and fictional workflows do not establish readiness for real patient use.
 
-The mock AI is deterministic demonstration behavior. These tests do not establish clinical safety, matching quality, crisis detection accuracy or therapeutic effectiveness. A qualified professional must review screening and the service model before any real-user service. Repository policy permits fictional data only.
+The offline local demo uses deterministic mock AI; the deployed app uses live Gemini generation and embeddings. These tests do not establish clinical safety, matching quality, crisis detection accuracy or therapeutic effectiveness. A qualified professional must review screening and the service model before any real-user service. Repository policy permits fictional data only.
 
 The prescribed 16-slide English pitch deck and 2:41 narrated English demo are included in docs/submission. The original local browser checks above remain useful separately from the deployed checks.
 
 ## Publication build verification — 10 October 2026
 
 The publication checkout was built from the existing remote main branch plus the current deployed-app implementation. All 30 backend tests passed (zero failures, errors or skips), all 6 frontend role-routing tests passed, and the production frontend build succeeded. Credential-pattern scanning of the publication files found no embedded keys or tokens. The team confirmed that the legacy key present in older public history was already revoked; history was preserved.
+
+## Submission assets and availability — 12 October 2026
+
+The final video is 161.39 seconds, 1920×1080, H.264/AAC at 30 fps, with Aoede synthetic narration and retimed captions. Full media decode passed and caption intervals fit within the video. It is uploaded to Google Drive with anyone-with-link viewer access. The 16-slide PowerPoint and PDF preserve the organizer's format and include the video link. The brief description is within 1,024 characters.
+
+The Firebase site returned HTTP 200. The API health endpoint reported `status=ok`, `aiMode=google` and `demoAccounts=false`. GitHub reports the repository as public with `main` as its default branch. This is an availability and documentation check, not a rerun of authenticated workflows or clinical evaluation. No application code changed in the documentation reconciliation.

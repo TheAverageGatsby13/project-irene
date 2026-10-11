@@ -1,6 +1,6 @@
 # Irene deployment status
 
-Verified 10 October 2026. This is a working prototype for **fictional data only**, not a clinical service.
+Deployment verified 10 October 2026; handoff updated and public availability rechecked 12 October 2026. This is a working prototype for **fictional data only**, not a clinical service.
 
 ## Open the app
 
@@ -85,7 +85,7 @@ To temporarily stop public API access while retaining data, remove the service's
 
 ## Project handoff
 
-Deployment is complete. The tested source, prescribed-template pitch deck and narrated demo were published to the public GitHub repository on 10 October 2026. The public YouTube/Drive video link and organizer-dashboard submission remain pending. Keep private credential files, database exports, personal details and real health information out of all submission materials.
+Deployment and publication are complete. The tested source and prescribed-template deck are in the [public repository](https://github.com/TheAverageGatsby13/project-irene). The final [2:41 Aoede-narrated video](https://drive.google.com/file/d/1VxKqMv-1Tg9g7m6cUbuaK8eWOmsG7w3e/view) was uploaded to Google Drive on 12 October 2026 with anyone-with-link viewing enabled; its link is included in both deck formats. The website returned HTTP 200 and the API health endpoint reported `status=ok`, `aiMode=google`, and `demoAccounts=false` during the 12 October availability check. These checks do not repeat the full workflow evaluation. The team still needs to submit the materials through the organizer dashboard; no submission confirmation has been recorded. Keep credentials and real health information out of submission materials.
 
 ### Sign-in UI refinement, 10 October 2026
 

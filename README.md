@@ -4,7 +4,9 @@ A working app for affordable, therapist-led group support. Participants share th
 
 **Fictional data only.** This repository does not operate a clinical service or provide emergency monitoring. The local demo uses deterministic simulation. The deployed demo uses real Gemini generation and embeddings, Cloud Run and Supabase PostgreSQL. Live technical integration has been verified; clinical validity has not.
 
-**[Open Irene](https://project-irene-fd39e.web.app)** · [Deployment status and rollback](docs/DEPLOYMENT_STATUS.md)
+**[Open Irene](https://project-irene-fd39e.web.app)** · [Watch the 2:41 demo](https://drive.google.com/file/d/1VxKqMv-1Tg9g7m6cUbuaK8eWOmsG7w3e/view) · [Pitch deck](docs/submission/Irene-AI-Builder-Cup.pdf)
+
+**Release status — 12 October 2026:** app deployed, source public, prescribed-template deck complete, and final video uploaded with link viewing enabled. [Current product scope](docs/PRODUCT_BUILD_PLAN.md) · [Deployment and rollback](docs/DEPLOYMENT_STATUS.md).
 
 ## Run the complete app
 
@@ -29,7 +31,7 @@ Click a demo role, then Login. Local accounts use `Password@123`: `patient1@iren
 - Therapist-supplied Google Meet links, discreet downloadable calendar events and private facilitator preparation drafts. Irene does not create or verify Meet rooms.
 - Participant data export and deletion, including derived matching data and affected preparation drafts.
 - Professional applications and administrator verification before therapist access. Administrators cannot browse private matching results.
-- Google-only AI adapter, Firebase Hosting configuration, Cloud Run container, Supabase PostgreSQL profile, Secret Manager references and Cloud Build configuration. An alternative Vertex/Cloud SQL profile remains available. OCI is removed.
+- Live Google AI generation and embeddings, Firebase Hosting frontend, Cloud Run backend, Supabase PostgreSQL, Secret Manager credentials, and a container built through Cloud Build and stored in Artifact Registry.
 
 ## Demo journey
 
@@ -47,11 +49,23 @@ See [demo narration and submission checklist](docs/DEMO_AND_SUBMISSION.md).
 
 For fictional local input, set `AI_MODE=google`, `GOOGLE_AI_PROVIDER=gemini`, and `GEMINI_API_KEY` in the backend environment. Keep keys out of frontend configuration and Git. Defaults are `gemini-3.8-flash` and `gemini-embedding-001`. Models are configurable and require live verification for the selected account.
 
-The recommended low-cost setup uses Firebase Hosting (Spark), Cloud Run (minimum 0, maximum 2), Supabase PostgreSQL through a TLS-verified session pooler, and Gemini API credentials in Secret Manager. The new `hosted` profile disables demo seeding and API documentation, restricts CORS to your Firebase origins, and adds database readiness checks. Its example explicitly selects `gemini-3.5-flash-lite`; verify model access and free quotas before deploying.
+The live deployment uses the `hosted` profile:
 
-Keep Firebase/Gemini in an unbilled project and Cloud Run in a separate billing-enabled project if retaining Gemini free-tier access. The alternative `cloud` profile uses Vertex, Sensitive Data Protection and Cloud SQL. Neither mode promises India-only AI processing. Developer API mode uses only basic email masking and must remain fictional-data-only.
+| Component | Used in the live app |
+| --- | --- |
+| Frontend | React/Vite on Firebase Hosting (Spark) |
+| Backend | Java/Spring Boot on Cloud Run, Mumbai; minimum 0, maximum 2 instances |
+| Database | Supabase PostgreSQL through a certificate-verified TLS session pooler |
+| Generation | Gemini Developer API, `gemini-3.5-flash-lite` |
+| Similarity features | `gemini-embedding-001`, 768-dimensional embeddings |
+| Credentials | Secret Manager and a dedicated runtime service identity |
+| Build and image storage | Cloud Build and Artifact Registry |
 
-[Beginner deployment checklist](docs/GOOGLE_CLOUD_SETUP.md) covers costs, every console step, first-admin bootstrap, verification and rollback. The app is deployed; current resource identifiers and verification evidence are in [deployment status](docs/DEPLOYMENT_STATUS.md). The new deployment script defaults to `--plan`; only an explicit `--apply` deploys. Do not use the older Cloud SQL deployment script for the Supabase setup.
+The hosted profile disables demo seeding and API documentation, restricts CORS to the two Firebase origins, and includes database readiness checks. The default models above apply to local configuration; the deployed generation model is explicitly overridden as shown in this table.
+
+Firebase/Gemini are in an unbilled project; Cloud Run is in a separate trial-backed project. Firestore and Firebase Authentication are not used: PostgreSQL stores application data and Irene manages role-based accounts. Gemma and ADK are not integrated. The alternative `cloud` configuration contains Vertex, Sensitive Data Protection and Cloud SQL paths, but none is used by this deployment. Developer API mode uses basic email masking and remains fictional-data-only; India-only AI processing is not promised.
+
+[Beginner deployment checklist](docs/GOOGLE_CLOUD_SETUP.md) covers costs, every console step, first-admin bootstrap, verification and rollback. The app is deployed; current resource identifiers and verification evidence are in [deployment status](docs/DEPLOYMENT_STATUS.md). The hosted deployment script defaults to `--plan`; only an explicit `--apply` deploys. Do not use the older Cloud SQL deployment script for the Supabase setup.
 
 ## Visual design
 
@@ -114,4 +128,4 @@ The login card now offers Participant, Therapist and Admin entry points. The bac
 
 Google AI drafts intake summaries, extracts concerns/goals, flags possible risks for review, produces embeddings used by the matching scorer, and prepares private facilitator briefs. Schedule, language, budget and other constraints are enforced by application logic; therapists review suitability and approve groups. The UI explains AI assistance in How it works.
 
-Run the frontend role-routing checks with `node --test frontend/tests/authRouting.test.js`. The requested top status banner and footer confidentiality clause were removed; intake consent and role authorization remain enforced.
+Run the frontend role-routing checks with `node --test frontend/tests/authRouting.test.js`. Intake consent and role authorization are enforced independently of the selected sign-in entry point.

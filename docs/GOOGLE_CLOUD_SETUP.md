@@ -21,7 +21,7 @@ Firebase App Hosting requires Blaze and is unnecessary for this Vite SPA. Firest
 
 ### Keep frontend/AI and backend billing separate
 
-Create two Google projects, once you choose to deploy:
+The deployed setup already uses two Google projects. For a separate installation, create the following:
 
 - **Project A: frontend + AI.** Firebase Spark and Gemini free tier. Leave this project unlinked from Cloud Billing. The API key belongs to this project.
 - **Project B: backend.** Cloud Run, Secret Manager, Cloud Build and Artifact Registry. This project needs billing, even when usage fits free allowances. An eligible free trial can cover eligible Cloud usage.
@@ -182,7 +182,7 @@ Edit `deploy/hosted/env.yaml`:
 
 This file is ignored by Git, Docker and Cloud Build. It contains settings, not passwords. Do not place secrets in any other environment file.
 
-Sign in using your own account. These are future account/build steps, not required to review the configuration:
+Sign in using your own account. These commands reproduce the existing build setup for a new installation or later update:
 
 ```sh
 gcloud auth login
@@ -221,7 +221,7 @@ bash deploy/hosted/deploy-backend.sh --plan
 
 Use your actual secret version numbers. The preview runs locally and creates nothing. Check the image, project, service account, secret **names**, 0–2 scaling and region before going further.
 
-## 10. Future deployment: private backend first
+## 10. Reproducing a deployment: private backend first
 
 **This is the first actual deployment step. Do not execute until you decide to deploy.**
 
@@ -317,7 +317,7 @@ This file contains account hashes and private demo records; protect it and never
 
 **Pause public access:** remove `allUsers` from the Cloud Run service's Invoker permissions, and disable Hosting with `firebase hosting:disable --project "$IRENE_FIREBASE_PROJECT_ID"` if needed. Removing access does not delete resources or eliminate retained-storage charges. To fully stop backend compute, delete the Cloud Run service after recording its configuration. Review and, when no longer needed, delete old build source archives, container images and unused secrets; retain private backups first. Deleting a Supabase project destroys its data. Do not delete anything merely to roll back a release.
 
-## 14. Local verification and remaining manual checklist
+## 14. Recorded deployment completion and pre-presentation checks
 
 Validated locally for this change: **30 backend tests passed**, the production frontend build passed, both shell scripts passed syntax checks, and a fake-cloud-command check confirmed the default deployment preview makes no cloud call. Invalid image/secret references and invalid frontend API URLs were rejected. Docker was unavailable locally; Cloud Build subsequently built and tested the container successfully. Live PostgreSQL, Gemini and public-site checks also passed—see deployment status.
 
@@ -331,15 +331,18 @@ bash -n deploy/hosted/build-frontend.sh deploy/hosted/deploy-backend.sh
 
 The synthetic URL is a build placeholder; do not publish that build. Rebuild with the real service URL before Hosting deployment.
 
-- [ ] Choose the budget and personally complete any required billing verification.
-- [ ] Project A is Spark/unbilled; Gemini key/model quotas verified.
-- [ ] Project B APIs, budget, runtime/builder identities and private build bucket prepared.
-- [ ] Supabase Free session pooler, CA, private schema and dedicated password verified.
-- [ ] Secret versions and private backend settings prepared; source upload excludes credentials.
-- [ ] Backend cloud build succeeds; immutable image digest recorded.
-- [ ] Deployment plan reviewed, then private backend deployed only when authorized.
-- [ ] Private health/database checks pass, then public invoker access deliberately granted.
-- [ ] Frontend rebuilt with actual API URL and published to Project A.
-- [ ] Fictional end-to-end Google workflow, ownership, CORS and mobile checks pass.
-- [ ] Bootstrap credentials removed from current revision; rollback and backup recorded.
-- [ ] Billing/quotas reviewed before handing judges the URL.
+The following deployment and publication steps were completed by 12 October; they are not pending tasks. Resource IDs and rollback instructions are recorded in [deployment status](DEPLOYMENT_STATUS.md).
+
+- [x] Google trial/billing verification completed; ₹500 monthly budget alert configured.
+- [x] Project A left Spark/unbilled; live Gemini generation and embeddings verified.
+- [x] Project B APIs, runtime/builder identities and private build bucket prepared.
+- [x] Supabase Free session pooler, CA, private schema and restricted app role verified.
+- [x] Runtime secrets configured; credential files excluded from published source.
+- [x] Cloud Build succeeded; immutable image digest recorded.
+- [x] Backend deployed and health/database checks passed; public API invocation enabled with application authorization intact.
+- [x] Frontend built with the actual API URL and published to Firebase Hosting.
+- [x] Fictional end-to-end Google workflow, ownership, CORS and browser checks recorded.
+- [x] Bootstrap secrets/settings disabled or removed; code rollback instructions recorded.
+- [x] Public source, prescribed-template deck and link-viewable 2:41 video published.
+
+Before presenting, open the live site and video, check service quotas and billing, and confirm Supabase is active. These are recurring availability checks. No baseline database backup or automatic backup was configured; create a backup before any future migration. The organizer-dashboard submission remains a team action.
