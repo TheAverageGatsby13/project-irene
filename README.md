@@ -99,7 +99,8 @@ Irene began with the experience of needing therapy in college, finding it expens
 - [Live product](https://project-irene-fd39e.web.app)
 - [Prescribed-template pitch deck (PDF)](docs/submission/Irene-AI-Builder-Cup.pdf)
 - [Editable pitch deck (PowerPoint)](docs/submission/Irene-AI-Builder-Cup.pptx)
-- [Narrated Indian English demo (2:59)](docs/submission/video/Irene-Demo-English.mp4)
+- [Narrated English demo (2:41)](docs/submission/video/Irene-Demo-English.mp4)
+- [Watch the demo on Google Drive](https://drive.google.com/file/d/1VxKqMv-1Tg9g7m6cUbuaK8eWOmsG7w3e/view)
 - [Brief description for the submission form](docs/submission/Brief-Description.txt)
 - [Verification evidence](docs/RELEASE_VERIFICATION.md)
 

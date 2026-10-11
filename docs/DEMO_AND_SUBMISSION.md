@@ -10,7 +10,7 @@ Use the [prescribed-template PDF](submission/Irene-AI-Builder-Cup.pdf) for submi
 
 ## Narrated product demo
 
-The [1080p MP4](submission/video/Irene-Demo-English.mp4) is 178.75 seconds, under three minutes. It uses actual live-app screens with a warm Indian English synthetic voiceover, captions and coral title cards. It is an edited walkthrough, not a continuous screen recording. All participant and professional data shown is fictional. No actual care, payment or Meet session was delivered. The demonstration circle was cancelled after recording.
+The [1080p MP4](submission/video/Irene-Demo-English.mp4) is 161.39 seconds, under three minutes. It uses actual live-app screens with a warm English synthetic voiceover, captions and coral title cards. It is an edited walkthrough, not a continuous screen recording. All participant and professional data shown is fictional. No actual care, payment or Meet session was delivered. The demonstration circle was cancelled after recording.
 
 [Script](submission/video/Irene-Voiceover-Script.txt) · [Captions](submission/video/Irene-Demo-English.srt) · [Separate voiceover](submission/video/Irene-Voiceover-English.mp3).
 
@@ -18,14 +18,14 @@ The [1080p MP4](submission/video/Irene-Demo-English.mp4) is 178.75 seconds, unde
 
 - Product: https://project-irene-fd39e.web.app
 - Repository: https://github.com/TheAverageGatsby13/project-irene
-- Public video service link: awaiting the team’s YouTube/Drive upload. Add it to slide 14 and the submission form before submitting.
+- Public video service link: [Watch the Irene demo on Google Drive](https://drive.google.com/file/d/1VxKqMv-1Tg9g7m6cUbuaK8eWOmsG7w3e/view). Anyone with the link can view. The link is included on slide 14.
 
 ## Final manual checklist
 
 1. Open all submitted links while signed out. The video must be public or accessible to anyone with its link.
 2. Confirm the team roster, category, exact deadline and required fields in the organizer dashboard.
 3. Preserve the organizer’s written rebuild approval privately.
-4. Use the prescribed-template PDF and the prepared brief description. Add the public video URL to slide 14 before the final upload.
+4. Use the prescribed-template PDF and the prepared brief description. Use the Google Drive video URL above in the submission form.
 5. Present with fictional accounts. Never publish administrator credentials or real health data.
 6. Confirm that any legacy API key previously committed to Git history has been revoked. Current source uses environment variables and Secret Manager.
 7. Submit through the organizer dashboard and save its confirmation.

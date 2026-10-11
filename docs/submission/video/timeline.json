@@ -3,84 +3,84 @@
     "scene": "01",
     "title": "A little less alone.",
     "start": 0,
-    "duration": 15.633,
+    "duration": 15.067,
     "source": "title"
   },
   {
     "scene": "02",
     "title": "Share the cost.\nKeep the human care.",
-    "start": 15.633,
-    "duration": 16.6,
+    "start": 15.067,
+    "duration": 16.467,
     "source": "cost"
   },
   {
     "scene": "03",
     "title": "Your pace.\nYour choice.",
-    "start": 32.233,
+    "start": 31.533,
     "duration": 11.0,
     "source": "participant"
   },
   {
     "scene": "04",
     "title": "A practical fit,\nfrom the start.",
-    "start": 43.233,
-    "duration": 14.367,
+    "start": 42.533,
+    "duration": 12.733,
     "source": "preferences"
   },
   {
     "scene": "05",
     "title": "Start with\nyour own words.",
-    "start": 57.6,
-    "duration": 13.7,
+    "start": 55.267,
+    "duration": 11.233,
     "source": "story"
   },
   {
     "scene": "06",
     "title": "AI drafts.\nYou confirm.",
-    "start": 71.3,
-    "duration": 16.233,
+    "start": 66.5,
+    "duration": 15.167,
     "source": "summary"
   },
   {
     "scene": "07",
     "title": "A professional\nmakes the decision.",
-    "start": 87.533,
-    "duration": 15.567,
+    "start": 81.667,
+    "duration": 12.9,
     "source": "review"
   },
   {
     "scene": "08",
     "title": "Find shared\ncommon ground.",
-    "start": 103.1,
-    "duration": 16.6,
+    "start": 94.567,
+    "duration": 14.633,
     "source": "matching"
   },
   {
     "scene": "09",
     "title": "An invitation.\nNever an obligation.",
-    "start": 119.7,
-    "duration": 14.3,
+    "start": 109.2,
+    "duration": 12.467,
     "source": "invitation"
   },
   {
     "scene": "10",
     "title": "Control stays\nwith the person.",
-    "start": 134.0,
-    "duration": 15.667,
+    "start": 121.667,
+    "duration": 14.333,
     "source": "privacy"
   },
   {
     "scene": "11",
     "title": "Built. Connected.\nDeployed.",
-    "start": 149.667,
-    "duration": 17.167,
+    "start": 136.0,
+    "duration": 14.467,
     "source": "architecture"
   },
   {
     "scene": "12",
     "title": "A shared beginning.",
-    "start": 166.833,
-    "duration": 11.9,
+    "start": 150.467,
+    "duration": 10.9,
     "source": "closing"
   }
 ]

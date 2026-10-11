@@ -1,183 +1,183 @@
 1
-00:00:00,200 --> 00:00:02,276
+00:00:00,200 --> 00:00:02,164
 Support can be expensive.
 
 2
-00:00:02,276 --> 00:00:05,909
+00:00:02,164 --> 00:00:05,601
 And sharing personal concerns with a room
 
 3
-00:00:05,909 --> 00:00:09,023
+00:00:05,601 --> 00:00:08,548
 full of strangers can feel difficult.
 
 4
-00:00:09,023 --> 00:00:15,251
+00:00:08,548 --> 00:00:14,440
 Meet Irene: a private first step toward affordable, therapist led group support.
 
 5
-00:00:15,833 --> 00:00:17,323
+00:00:15,267 --> 00:00:16,722
 The idea is simple.
 
 6
-00:00:17,323 --> 00:00:21,791
+00:00:16,722 --> 00:00:21,086
 One therapist leads a suitable group, and the session fee is shared.
 
 7
-00:00:21,791 --> 00:00:25,142
+00:00:21,086 --> 00:00:24,360
 For example, a twenty four hundred rupee session split
 
 8
-00:00:25,142 --> 00:00:28,121
+00:00:24,360 --> 00:00:27,269
 between six people is four hundred rupees each.
 
 9
-00:00:28,121 --> 00:00:31,844
+00:00:27,269 --> 00:00:30,907
 Actual fees and group sizes are set by the therapist.
 
 10
-00:00:32,433 --> 00:00:36,181
+00:00:31,733 --> 00:00:35,405
 Here is the live app, using a fictional participant.
 
 11
-00:00:36,181 --> 00:00:40,346
+00:00:35,405 --> 00:00:39,485
 The person chooses a program and begins a private intake.
 
 12
-00:00:40,346 --> 00:00:42,844
+00:00:39,485 --> 00:00:41,933
 Other participants cannot read their story.
 
 13
-00:00:43,433 --> 00:00:48,352
+00:00:42,733 --> 00:00:46,990
 They set their availability, sharing comfort, and maximum session budget.
 
 14
-00:00:48,352 --> 00:00:52,778
+00:00:46,990 --> 00:00:50,822
 These practical constraints matter alongside shared concerns, so a
 
 15
-00:00:52,778 --> 00:00:57,204
+00:00:50,822 --> 00:00:54,653
 promising match also needs to work in everyday life.
 
 16
-00:00:57,800 --> 00:01:02,490
+00:00:55,467 --> 00:00:59,181
 With explicit consent, the participant describes their concerns and goals.
 
 17
-00:01:02,490 --> 00:01:06,710
+00:00:59,181 --> 00:01:02,524
 In this example, a fictional student wants more confidence
 
 18
-00:01:06,710 --> 00:01:10,931
+00:01:02,524 --> 00:01:05,867
 speaking in class and a stronger sense of connection.
 
 19
-00:01:11,500 --> 00:01:16,866
+00:01:06,700 --> 00:01:11,623
 Gemini turns that intake into a draft summary and structured matching features.
 
 20
-00:01:16,866 --> 00:01:19,996
+00:01:11,623 --> 00:01:14,495
 The participant can correct the summary before
 
 21
-00:01:19,996 --> 00:01:22,679
+00:01:14,495 --> 00:01:16,957
 confirming it for their chosen therapist.
 
 22
-00:01:22,679 --> 00:01:27,151
+00:01:16,957 --> 00:01:21,060
 Possible risk or uncertainty signals are routed for human review.
 
 23
-00:01:27,733 --> 00:01:31,476
+00:01:21,867 --> 00:01:24,887
 Next, a verified therapist reviews the confirmed intake.
 
 24
-00:01:31,476 --> 00:01:35,219
+00:01:24,887 --> 00:01:27,907
 They decide whether the person should be considered
 
 25
-00:01:35,219 --> 00:01:38,962
+00:01:27,907 --> 00:01:30,927
 for a group or needs an individual conversation.
 
 26
-00:01:38,962 --> 00:01:42,704
+00:01:30,927 --> 00:01:33,947
 AI does not diagnose or replace that judgment.
 
 27
-00:01:43,300 --> 00:01:48,303
+00:01:34,767 --> 00:01:39,079
 Google embeddings help compare the meaning of concerns and goals.
 
 28
-00:01:48,303 --> 00:01:53,307
+00:01:39,079 --> 00:01:43,392
 Irene combines similarity with practical constraints to suggest a circle.
 
 29
-00:01:53,307 --> 00:01:59,311
+00:01:43,392 --> 00:01:48,567
 The therapist reviews the proposal, sets the session details, and approves invitations.
 
 30
-00:01:59,900 --> 00:02:03,001
+00:01:49,400 --> 00:01:52,028
 The participant sees the session and exact
 
 31
-00:02:03,001 --> 00:02:05,658
+00:01:52,028 --> 00:01:54,281
 individual quote, then accepts or declines.
 
 32
-00:02:05,658 --> 00:02:07,873
+00:01:54,281 --> 00:01:56,159
 This demo collects no payment.
 
 33
-00:02:07,873 --> 00:02:10,973
+00:01:56,159 --> 00:01:58,787
 The therapist can also generate a private
 
 34
-00:02:10,973 --> 00:02:13,631
+00:01:58,787 --> 00:02:01,040
 AI preparation brief for the group.
 
 35
-00:02:14,200 --> 00:02:18,727
+00:02:01,867 --> 00:02:05,923
 Participants can review, export, or delete their intake data.
 
 36
-00:02:18,727 --> 00:02:22,752
+00:02:05,923 --> 00:02:09,528
 Access is restricted by account role and assignment.
 
 37
-00:02:22,752 --> 00:02:26,273
+00:02:09,528 --> 00:02:12,683
 The demonstration uses fictional information, and is
 
 38
-00:02:26,273 --> 00:02:29,291
+00:02:12,683 --> 00:02:15,387
 not a clinical or emergency service.
 
 39
-00:02:29,867 --> 00:02:34,386
+00:02:16,200 --> 00:02:19,920
 Irene is live on Firebase Hosting and Google Cloud
 
 40
-00:02:34,386 --> 00:02:38,403
+00:02:19,920 --> 00:02:23,227
 Run, with Gemini, Secret Manager, and Supabase PostgreSQL.
 
 41
-00:02:38,403 --> 00:02:43,425
+00:02:23,227 --> 00:02:27,360
 Thirty backend tests and thirty five live workflow checks passed.
 
 42
-00:02:43,425 --> 00:02:46,438
+00:02:27,360 --> 00:02:29,840
 Clinical validation remains a next step.
 
 43
-00:02:47,033 --> 00:02:50,635
+00:02:30,667 --> 00:02:33,874
 Irene makes the first step private, the
 
 44
-00:02:50,635 --> 00:02:54,237
+00:02:33,874 --> 00:02:37,081
 grouping thoughtful, and the session cost shared.
 
 45
-00:02:54,237 --> 00:02:56,295
+00:02:37,081 --> 00:02:38,914
 A little less alone.
 
 46
-00:02:56,295 --> 00:02:58,353
+00:02:38,914 --> 00:02:40,747
 Explore the live prototype.
