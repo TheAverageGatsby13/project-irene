@@ -1,14 +1,14 @@
 PROJECT IRENE — NARRATED DEMO
-Created 10 October 2026.
+Created 10 October 2026. Narration revised 11 October 2026.
 
-Irene-Demo-English.mp4: 1920 × 1080, 30 fps, H.264 + AAC, approximately 2 minutes 30 seconds.
+Irene-Demo-English.mp4: 1920 × 1080, 30 fps, H.264 + AAC, approximately 2 minutes 59 seconds.
 Irene-Demo-English.srt: caption file; the MP4 also has visible captions.
-Irene-Voiceover-English.mp3: separate English narration.
+Irene-Voiceover-English.mp3: separate Indian English narration.
 Irene-Voiceover-Script.txt: editable narration text.
 Irene-Demo-Poster.png: title-frame thumbnail.
 timeline.json: scene timings.
 
-This is an edited walkthrough using actual screenshots captured from the deployed Irene app, plus purpose-made title, pricing, and architecture graphics. It is not a continuous screen recording. The voiceover uses the built-in macOS Samantha synthetic English voice; it is not the founder’s recorded voice. No background music is included.
+This is an edited walkthrough using actual screenshots captured from the deployed Irene app, plus purpose-made title, pricing, and architecture graphics. It is not a continuous screen recording. The voiceover uses Google Gemini speech generation (Sulafat), directed in warm, caring Indian English. It is synthetic narration, not the founder’s recorded voice. Scenes and captions were retimed for this narration. No background music is included.
 
 The displayed accounts and intake content are fictional. The recorded journey exercised live Gemini generation, summary confirmation, therapist review, matching, circle approval, participant acceptance and private preparation. Only the new video-demo circle was cancelled after capture. Existing circles and user-created accounts were preserved. No real Google Meet room or payment was created.
 

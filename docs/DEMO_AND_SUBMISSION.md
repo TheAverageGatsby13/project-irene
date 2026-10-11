@@ -10,7 +10,7 @@ Use the [prescribed-template PDF](submission/Irene-AI-Builder-Cup.pdf) for submi
 
 ## Narrated product demo
 
-The [1080p MP4](submission/video/Irene-Demo-English.mp4) is 150.12 seconds, under three minutes. It uses actual live-app screens with an English synthetic voiceover, captions and coral title cards. It is an edited walkthrough, not a continuous screen recording. All participant and professional data shown is fictional. No actual care, payment or Meet session was delivered. The demonstration circle was cancelled after recording.
+The [1080p MP4](submission/video/Irene-Demo-English.mp4) is 178.75 seconds, under three minutes. It uses actual live-app screens with a warm Indian English synthetic voiceover, captions and coral title cards. It is an edited walkthrough, not a continuous screen recording. All participant and professional data shown is fictional. No actual care, payment or Meet session was delivered. The demonstration circle was cancelled after recording.
 
 [Script](submission/video/Irene-Voiceover-Script.txt) · [Captions](submission/video/Irene-Demo-English.srt) · [Separate voiceover](submission/video/Irene-Voiceover-English.mp3).
 

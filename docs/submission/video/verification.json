@@ -1,11 +1,19 @@
 {
-  "durationSeconds": 150.12,
+  "durationSeconds": 178.75,
   "resolution": "1920x1080",
   "framesPerSecond": 30,
   "videoCodec": "H.264",
   "audioCodec": "AAC",
   "fullDecode": "passed",
-  "frameCount": 4503,
-  "sampleFramesInspected": 6,
-  "fileBytes": 8687327
+  "frameCount": 5362,
+  "fileBytes": 9790315,
+  "narrationLanguage": "Indian English",
+  "narrationProvider": "Google Gemini",
+  "narrationModels": {
+    "scenes01to11": "gemini-2.5-flash-preview-tts",
+    "scene12": "gemini-3.1-flash-tts-preview"
+  },
+  "narrationVoice": "Sulafat",
+  "narrationStyle": "Warm, caring and gently reassuring Indian English; synthetic narration",
+  "audioPeakDb": "-1.583981"
 }

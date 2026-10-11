@@ -32,7 +32,7 @@ Vertex/DLP and the alternative Cloud SQL profile remain untested; the deployed p
 
 The mock AI is deterministic demonstration behavior. These tests do not establish clinical safety, matching quality, crisis detection accuracy or therapeutic effectiveness. A qualified professional must review screening and the service model before any real-user service. Repository policy permits fictional data only.
 
-The prescribed 16-slide English pitch deck and 2:30 narrated demo are included in docs/submission. The original local browser checks above remain useful separately from the deployed checks.
+The prescribed 16-slide English pitch deck and 2:59 narrated Indian English demo are included in docs/submission. The original local browser checks above remain useful separately from the deployed checks.
 
 ## Publication build verification — 10 October 2026
 
